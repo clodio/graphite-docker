@@ -52,15 +52,15 @@ You can use alternatives retentions periods by prefixing your metrics
 
     1sec.* : 1s:1d
 
-    1min.* 1m:31d
+    1min.* : 1m:31d
 
-    10m.* 10m:31d
+    10m.* : 10m:31d
 
-    1day.* 1d:365d
+    1day.* : 1d:365d
 
 If you use statsd, the folowing retention rules are applied :
 
-	stats.* : 10s:1d,1m:31d,10m:31d,1d:365d
+	stats.* : 10s:1d,1m:7d,10m:31d,1d:365d
 
 #### Logs
 	By default, useless logs and carbon metrics are disabled.

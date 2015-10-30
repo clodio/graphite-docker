@@ -1,7 +1,8 @@
-# DOCKER-VERSION 0.4.0
-
 FROM	ubuntu:14.04
 #run	echo 'deb http://us.archive.ubuntu.com/ubuntu/ precise universe' >> /etc/apt/sources.list
+
+MAINTAINER claude.seguret@gmail.com
+ 
 RUN	apt-get -y update
 
 # Install required packages
@@ -21,6 +22,7 @@ ADD	./carbon.conf /var/lib/graphite/conf/carbon.conf
 ADD	./storage-schemas.conf /var/lib/graphite/conf/storage-schemas.conf
 ADD	./storage-aggregation.conf /var/lib/graphite/conf/storage-aggregation.conf
 RUN	mkdir -p /var/lib/graphite/storage/whisper
+RUN ln -s /var/lib/graphite /opt/graphite 
 RUN	touch /var/lib/graphite/storage/graphite.db /var/lib/graphite/storage/index
 RUN	chown -R www-data /var/lib/graphite/storage
 RUN	chmod 0775 /var/lib/graphite/storage /var/lib/graphite/storage/whisper
@@ -39,5 +41,3 @@ EXPOSE	:7002
 VOLUME ["/var/lib/graphite/storage", "/var/log"]
 
 CMD	["/usr/bin/supervisord"]
-
-# vim:ts=8:noet:
