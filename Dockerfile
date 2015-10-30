@@ -22,6 +22,8 @@ ADD	./carbon.conf /var/lib/graphite/conf/carbon.conf
 ADD	./storage-schemas.conf /var/lib/graphite/conf/storage-schemas.conf
 ADD	./storage-aggregation.conf /var/lib/graphite/conf/storage-aggregation.conf
 RUN	mkdir -p /var/lib/graphite/storage/whisper
+RUN	mkdir -p /var/log/graphite
+RUN	chown -R www-data /var/log/graphite
 RUN ln -s /var/lib/graphite /opt/graphite 
 RUN	touch /var/lib/graphite/storage/graphite.db /var/lib/graphite/storage/index
 RUN	chown -R www-data /var/lib/graphite/storage
