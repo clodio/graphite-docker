@@ -1,5 +1,4 @@
 FROM	ubuntu:14.04
-#run	echo 'deb http://us.archive.ubuntu.com/ubuntu/ precise universe' >> /etc/apt/sources.list
 
 MAINTAINER claude.seguret@gmail.com
  
@@ -11,11 +10,12 @@ RUN	pip install whisper
 RUN	pip install --install-option="--prefix=/var/lib/graphite" --install-option="--install-lib=/var/lib/graphite/lib" carbon
 RUN	pip install --install-option="--prefix=/var/lib/graphite" --install-option="--install-lib=/var/lib/graphite/webapp" graphite-web
 
-# Add system service config
-ADD	./nginx.conf /etc/nginx/nginx.conf
+# Add supervisord
+RUN	apt-get -y install supervisor
 ADD	./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Add graphite config
+ADD	./nginx.conf /etc/nginx/nginx.conf
 ADD	./initial_data.json /var/lib/graphite/webapp/graphite/initial_data.json
 ADD	./local_settings.py /var/lib/graphite/webapp/graphite/local_settings.py
 ADD	./carbon.conf /var/lib/graphite/conf/carbon.conf
@@ -30,6 +30,10 @@ RUN	chown -R www-data /var/lib/graphite/storage
 RUN	chmod 0775 /var/lib/graphite/storage /var/lib/graphite/storage/whisper
 RUN	chmod 0664 /var/lib/graphite/storage/graphite.db
 RUN	cd /var/lib/graphite/webapp/graphite && python manage.py syncdb --noinput
+
+# Install collectd
+RUN	apt-get -y install collectd collectd-utils
+ADD	./collectd.conf /etc/collectd/collectd.conf
 
 # Nginx
 EXPOSE	:80
